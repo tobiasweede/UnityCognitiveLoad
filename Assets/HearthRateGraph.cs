@@ -1,25 +1,35 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Window_Graph : MonoBehaviour
+public class HearthRateGraph : MonoBehaviour
 {
     [SerializeField] private Sprite circleSprite;
+    private Text topInfoLeft;
+    private Text topInfoRight;
+    private Text topInfoMiddle;
     private RectTransform graphContainer;
     private RectTransform labelTemplateX;
     private RectTransform labelTemplateY;
     private RectTransform dashTemplateX;
     private RectTransform dashTemplateY;
     public int numElements = 20;
+    private float minValue = float.MaxValue;
+    private float maxValue = float.MinValue;
     private List<float> valueList = new();
+    private float yMinimum = 30;
     private float yMaximum = 200f;
-    private float xSize = 25f;
+    private float xSize = 28f;
     private List<GameObject> observationItemList = new();
 
     private void Awake()
     {
+        topInfoLeft = transform.Find("Top Info Left").GetComponent<RectTransform>().Find("value").GetComponent<Text>();
+        topInfoMiddle = transform.Find("Top Info Middle").GetComponent<RectTransform>().Find("value").GetComponent<Text>();
+        topInfoRight = transform.Find("Top Info Right").GetComponent<RectTransform>().Find("value").GetComponent<Text>();
         graphContainer = transform.Find("graphContainer").GetComponent<RectTransform>();
         labelTemplateX = graphContainer.Find("labelTemplateX").GetComponent<RectTransform>();
         labelTemplateY = graphContainer.Find("labelTemplateY").GetComponent<RectTransform>();
@@ -29,7 +39,7 @@ public class Window_Graph : MonoBehaviour
 
     private void Start()
     {
-        ShowGraph(numElements, (int _i) => "t-" + (_i), (float _f) => "" + Mathf.RoundToInt(_f));
+        ShowGraph(numElements, (int _i) => "-" + (_i), (float _f) => "" + Mathf.RoundToInt(_f));
         InvokeRepeating("SimulateObservation", 0f, 1f); // every 10 seconds starting at 0
     }
 
@@ -37,12 +47,23 @@ public class Window_Graph : MonoBehaviour
     {
         DestroyObservations();
         ShowObservations();
+        SetTopInfo();
+    }
+
+    private void SetTopInfo()
+    {
+        if (valueList.Min() < minValue)
+            topInfoLeft.text = valueList.Min().ToString();
+        if (valueList.Max() > maxValue)
+            topInfoRight.text = valueList.Max().ToString();
+        topInfoMiddle.text = valueList.Average().ToString();
+
     }
 
     private void SimulateObservation()
     {
         if (valueList.Count >= numElements) valueList.RemoveAt(numElements - 1);
-        valueList.Insert(0, UnityEngine.Random.Range(0f, 100f));
+        valueList.Insert(0, UnityEngine.Random.Range(30f, 200f));
     }
 
     private GameObject CreateCircle(Vector2 anchoredPosition)
@@ -65,14 +86,19 @@ public class Window_Graph : MonoBehaviour
         }
     }
 
+    private float getXPosition(int index, float xSize)
+    {
+        return index * xSize - xSize / 2;
+    }
+
     private void ShowObservations()
     {
         float graphHeight = graphContainer.sizeDelta.y;
         GameObject lastCircleGameObject = null;
         for (int i = 0; i < valueList.Count; i++)
         {
-            float xPosition = i * xSize + xSize;
-            float yPosition = (valueList[i] / yMaximum) * graphHeight;
+            float xPosition = getXPosition(i + 1, xSize);
+            float yPosition = ((valueList[i] - yMinimum) / (yMaximum + yMinimum)) * graphHeight;
             GameObject circleGameObject = CreateCircle(new Vector2(xPosition, yPosition));
             observationItemList.Add(circleGameObject);
             if (lastCircleGameObject != null)
@@ -98,8 +124,7 @@ public class Window_Graph : MonoBehaviour
 
         for (int i = 1; i <= numElements; i++)
         {
-            float xPosition = i * xSize;
-
+            float xPosition = getXPosition(i, xSize);
             RectTransform labelX = Instantiate(labelTemplateX);
             labelX.SetParent(graphContainer, false);
             labelX.gameObject.SetActive(true);
@@ -120,7 +145,7 @@ public class Window_Graph : MonoBehaviour
             labelY.gameObject.SetActive(true);
             float normalizedValue = i * 1f / seperatorCount;
             labelY.anchoredPosition = new Vector2(-25f, normalizedValue * graphHeight);
-            labelY.GetComponent<Text>().text = getAxisLabelY(normalizedValue * yMaximum);
+            labelY.GetComponent<Text>().text = getAxisLabelY((normalizedValue * (yMaximum - yMinimum)) + yMinimum);
 
             RectTransform dashY = Instantiate(dashTemplateY);
             dashY.SetParent(graphContainer, false);
