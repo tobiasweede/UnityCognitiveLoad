@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -9,31 +8,36 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HeartRateSocket : MonoBehaviour
+public class ChangeColorSocket : MonoBehaviour
 {
-    // Socket
     static Socket listener;
     private CancellationTokenSource source;
     public ManualResetEvent allDone;
-
-    // Network
+    private Color matColor;
     public Boolean externalInterface = false;
-    public int Port = 65431;
+
+    public static readonly int PORT = 65432;
     public static readonly int WAITTIME = 1;
 
-    // Graph
-    private HearthRateGraph hearthRateGraph;
+    private Text title;
 
     void Awake()
     {
         source = new CancellationTokenSource();
         allDone = new ManualResetEvent(false);
-        hearthRateGraph = GetComponent<HearthRateGraph>();
+
+        title = transform.Find("title").GetComponent<Text>();
     }
 
     async void Start()
     {
         await Task.Run(() => ListenEvents(source.Token));
+    }
+
+    void Update()
+    {
+        transform.GetComponent<Image>().color = matColor;
+        title.color = matColor;
     }
 
     private void ListenEvents(CancellationToken token)
@@ -46,7 +50,7 @@ public class HeartRateSocket : MonoBehaviour
             ipAddress = ipHostInfo.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
         else
             ipAddress = IPAddress.Loopback;
-        IPEndPoint localEndPoint = new IPEndPoint(ipAddress, Port);
+        IPEndPoint localEndPoint = new IPEndPoint(ipAddress, PORT);
 
         listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
@@ -59,7 +63,7 @@ public class HeartRateSocket : MonoBehaviour
             while (!token.IsCancellationRequested)
             {
                 allDone.Reset();
-                Debug.Log("Waiting for a connection... host :" + ipAddress.MapToIPv4().ToString() + " port : " + Port);
+                Debug.Log("Waiting for a connection... host :" + ipAddress.MapToIPv4().ToString() + " port : " + PORT);
                 listener.BeginAccept(new AsyncCallback(AcceptCallback), listener);
 
                 while (!token.IsCancellationRequested)
@@ -109,10 +113,23 @@ public class HeartRateSocket : MonoBehaviour
             {
                 string content = state.payload.ToString();
                 Debug.Log($"Read {content.Length} bytes from socket.\n Data : {content}");
-                hearthRateGraph.AddObservation(float.Parse(content));
+                SetColors(content);
             }
             handler.Close();
         }
+    }
+
+    //Set color to the Material
+    private void SetColors(string data)
+    {
+        string[] colors = data.Split(',');
+        matColor = new Color()
+        {
+            r = float.Parse(colors[0]) / 255f,
+            g = float.Parse(colors[1]) / 255f,
+            b = float.Parse(colors[2]) / 255f,
+            a = float.Parse(colors[3]) / 255f,
+        };
     }
 
     private void OnDestroy()

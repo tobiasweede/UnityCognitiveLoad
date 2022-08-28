@@ -23,7 +23,10 @@ public class HearthRateGraph : MonoBehaviour
     private float yMinimum = 30;
     private float yMaximum = 200f;
     private float xSize = 28f;
-    private List<GameObject> observationItemList = new();
+    private List<GameObject> observationList = new();
+    public Boolean SimulateData = false;
+    public float SimulateDataInterval = 1.0f;
+    private float simulateDataTimeLeft;
 
     private void Awake()
     {
@@ -40,11 +43,20 @@ public class HearthRateGraph : MonoBehaviour
     private void Start()
     {
         ShowGraph(numElements, (int _i) => "-" + (_i), (float _f) => "" + Mathf.RoundToInt(_f));
-        InvokeRepeating("SimulateObservation", 0f, 1f); // every 10 seconds starting at 0
+        simulateDataTimeLeft = SimulateDataInterval;
     }
 
     private void Update()
     {
+        if (SimulateData)
+        {
+            simulateDataTimeLeft -= Time.deltaTime;
+            if (simulateDataTimeLeft <0)
+            {
+                SimulateObservation();
+                simulateDataTimeLeft = SimulateDataInterval;
+            }
+        }
         DestroyObservations();
         ShowObservations();
         SetTopInfo();
@@ -52,12 +64,18 @@ public class HearthRateGraph : MonoBehaviour
 
     private void SetTopInfo()
     {
+        if (valueList.Count == 0) return;
         if (valueList.Min() < minValue)
             topInfoLeft.text = valueList.Min().ToString();
         if (valueList.Max() > maxValue)
             topInfoRight.text = valueList.Max().ToString();
         topInfoMiddle.text = valueList.Average().ToString();
 
+    }
+    public void AddObservation(float value)
+    {
+        if (valueList.Count >= numElements) valueList.RemoveAt(numElements - 1);
+        valueList.Insert(0, value);
     }
 
     private void SimulateObservation()
@@ -80,7 +98,7 @@ public class HearthRateGraph : MonoBehaviour
     }
     private void DestroyObservations()
     {
-        foreach (GameObject item in observationItemList)
+        foreach (GameObject item in observationList)
         {
             Destroy(item);
         }
@@ -94,18 +112,18 @@ public class HearthRateGraph : MonoBehaviour
     private void ShowObservations()
     {
         float graphHeight = graphContainer.sizeDelta.y;
-        GameObject lastCircleGameObject = null;
+        GameObject lastDotGameObject = null;
         for (int i = 0; i < valueList.Count; i++)
         {
             float xPosition = getXPosition(i + 1, xSize);
             float yPosition = ((valueList[i] - yMinimum) / (yMaximum + yMinimum)) * graphHeight;
-            GameObject circleGameObject = CreateCircle(new Vector2(xPosition, yPosition));
-            observationItemList.Add(circleGameObject);
-            if (lastCircleGameObject != null)
+            GameObject dotGameObject = CreateCircle(new Vector2(xPosition, yPosition));
+            observationList.Add(dotGameObject);
+            if (lastDotGameObject != null)
             {
-                CreateDotConnection(lastCircleGameObject.GetComponent<RectTransform>().anchoredPosition, circleGameObject.GetComponent<RectTransform>().anchoredPosition);
+                CreateDotConnection(lastDotGameObject.GetComponent<RectTransform>().anchoredPosition, dotGameObject.GetComponent<RectTransform>().anchoredPosition);
             }
-            lastCircleGameObject = circleGameObject;
+            lastDotGameObject = dotGameObject;
         }
 
     }
@@ -157,7 +175,7 @@ public class HearthRateGraph : MonoBehaviour
     private void CreateDotConnection(Vector2 dotPositionA, Vector2 dotPositionB)
     {
         GameObject gameObject = new GameObject("dotConnection", typeof(Image));
-        observationItemList.Add(gameObject);
+        observationList.Add(gameObject);
         gameObject.transform.SetParent(graphContainer, false);
         gameObject.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f); // white with 0.5 alpha 
         Vector2 dir = (dotPositionB - dotPositionA).normalized;
