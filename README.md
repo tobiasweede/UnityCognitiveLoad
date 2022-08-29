@@ -4,7 +4,7 @@ Unity Environment for biosignal workshop.
 
 ## Preview
 
-![current status](preview.png)
+![current status](preview.PNG)
 
 ## Versions
 
