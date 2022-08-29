@@ -659,7 +659,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   circleSprite: {fileID: 21300000, guid: afb68722fca766c018c0d9f71f2de608, type: 3}
   numElements: 20
-  SimulateData: 1
+  SimulateData: 0
   SimulateDataInterval: 1
 --- !u!114 &640909296
 MonoBehaviour:
