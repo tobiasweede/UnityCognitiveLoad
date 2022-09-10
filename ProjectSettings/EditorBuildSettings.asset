@@ -12,11 +12,11 @@ EditorBuildSettings:
     path: Assets/Scenes/EEG.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
+    path: Assets/Scenes/ETcomplex.unity
+    guid: 888e62b91aad449c5881d811109701ff
+  - enabled: 1
     path: Assets/Scenes/CL.unity
     guid: 2631686f125dd9278868c383a8b0c84f
-  - enabled: 1
-    path: Assets/Scenes/ETcomplex.unity
-    guid: 3ca1907f82d084c6cba7ccd99cb50006
   - enabled: 1
     path: Assets/Scenes/ETsimple.unity
     guid: 785d18d2a2e10706da430e40043e3301
