@@ -10,8 +10,8 @@ public class EyeTrackingEventVisual : MonoBehaviour
     TextMeshProUGUI fixationCountText;
     TextMeshProUGUI fixationMeanDurationText;
     TextMeshProUGUI title;
-    int fixationCount;
-    float sumDuration;
+    int fixationCount { get; set; }
+    float sumDuration { get; set; }
     // Start is called before the first frame update
     void Start()
     {
@@ -51,5 +51,11 @@ public class EyeTrackingEventVisual : MonoBehaviour
         fixationCount += 1;
         fixationCountText.text = fixationCount.ToString();
         fixationMeanDurationText.text = Math.Round((sumDuration / fixationCount), 2) + " ms";
+    }
+
+    public void ResetVisual()
+    {
+        fixationCount = 0;
+        sumDuration = 0;
     }
 }

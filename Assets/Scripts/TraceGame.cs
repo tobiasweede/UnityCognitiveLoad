@@ -38,6 +38,7 @@ public class TraceGame : MonoBehaviour
     public int IntervalShowNumbers = 4;
     private string numberString;
     private int sumNumber = 0;
+    LslOutlet lslOutlet;
 
     void Start()
     {
@@ -56,6 +57,8 @@ public class TraceGame : MonoBehaviour
         numbersEnterButton = GameObject.Find("NumbersEnterButton").GetComponent<Button>();
         numbersEnterSlider = GameObject.Find("NumbersEnterSlider").GetComponent<Slider>();
 
+        lslOutlet = GetComponent<LslOutlet>();
+
         wheel.gameObject.SetActive(false);
         wheelEnterButton.gameObject.SetActive(false);
         wheelEnterSlider.gameObject.SetActive(false);
@@ -70,7 +73,9 @@ public class TraceGame : MonoBehaviour
 
     public void StartTraceGame()
     {
-        Debug.Log("Trace game started");
+        string msg = $"Starting Cognitive Load Tasks: Balls {EnableBalls}, Numbers {EnableNumbers}, Wheel {EnableWheel}";
+        Debug.Log(msg);
+        lslOutlet.Send(msg);
         startUi.gameObject.SetActive(false);
 
         // Balls
@@ -143,6 +148,8 @@ public class TraceGame : MonoBehaviour
     IEnumerator EvaluateGame(float playDuration)
     {
         yield return new WaitForSeconds(playDuration);
+
+        lslOutlet.Send("Stopping Cognitive Load Tasks");
 
         if (EnableBalls)
         {

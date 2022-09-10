@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 489427312}
   - component: {fileID: 489427316}
   - component: {fileID: 489427317}
+  - component: {fileID: 489427318}
   m_Layer: 5
   m_Name: TraceGameCanvas
   m_TagString: Untagged
@@ -266,6 +267,18 @@ MonoBehaviour:
   ShowResultDuration: 5
   StartShowNumbers: 0
   IntervalShowNumbers: 7
+--- !u!114 &489427318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 489427311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d1e44fecf126f9cfa15a9d475defcef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,7 +530,7 @@ GameObject:
   - component: {fileID: 1363108466}
   - component: {fileID: 1363108465}
   m_Layer: 5
-  m_Name: title
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
