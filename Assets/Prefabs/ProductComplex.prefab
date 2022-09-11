@@ -552,7 +552,7 @@ GameObject:
   - component: {fileID: 8765552154233206959}
   - component: {fileID: 8765552154233206960}
   m_Layer: 5
-  m_Name: Blink Duraiton
+  m_Name: Mean Blink Duraiton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -606,7 +606,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Blink Duraiton
+  m_text: Mean Blink Dur.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1387,7 +1387,7 @@ GameObject:
   - component: {fileID: 8765552155191423088}
   - component: {fileID: 8765552155191423089}
   m_Layer: 5
-  m_Name: blinkDurationText
+  m_Name: blinkMeanDurationText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

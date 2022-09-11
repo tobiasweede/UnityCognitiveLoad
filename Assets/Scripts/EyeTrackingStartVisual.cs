@@ -9,7 +9,6 @@ public class EyeTrackingStartVisual : MonoBehaviour
     Text title;
     Text eval;
     List<GameObject> productList = new();
-    [SerializeField] int productCount = 4;
     Button startButton;
     void Start()
     {
@@ -23,16 +22,20 @@ public class EyeTrackingStartVisual : MonoBehaviour
         eval = GameObject.Find("Eval").GetComponent<Text>();
         eval.gameObject.SetActive(false);
 
-        for (int i = 0; i < productCount; i++)
-        {
-            string productName = $"Product {i + 1}";
-            GameObject product = GameObject.Find(productName);
-            productList.Add(product);
-            product.SetActive(false);
-        }
+        int i = 1;
+        GameObject product = null;
+        do {
+            string productName = $"Product {i}";
+            product = GameObject.Find(productName);
+            if (product != null)
+            {
+                productList.Add(product);
+                product.SetActive(false);
+            }
+            i++;
+        } while (product != null);
     }
 
-    // Update is called once per frame
     void StartVisual()
     {
         startButton.interactable = false;

@@ -9,7 +9,7 @@ public class EyeTrackingEvents : MonoBehaviour
     {
         Blink,
         Fixation,
-        Saccade,
+        // Saccade, // no use here
     }
     public string[] ProductArray = {
         "Product 1",
@@ -23,14 +23,15 @@ public class EyeTrackingEvents : MonoBehaviour
         public EyeTrackingEventType type { get; }
         public DateTime start { get; }
         public float duration { get; }
-        public float velocity { get; }
+        public float dilation { get; }
         public string product { get; }
 
-        public EyeTrackingEvent(EyeTrackingEventType type, DateTime start, float duration, string product)
+        public EyeTrackingEvent(EyeTrackingEventType type, DateTime start, float duration, float dilation, string product)
         {
             this.type = type;
             this.start = start;
             this.duration = duration;
+            this.dilation = dilation;
             this.product = product;
         }
     }
@@ -50,12 +51,13 @@ public class EyeTrackingEvents : MonoBehaviour
             timer -= Time.deltaTime;
             if (timer <= 0f)
             {
-                timer = RandomExponentialVariable();
-                var duration = RandomGaussian(0.01f, timer);
+                timer = RandomExponentialVariable(2f, 0.01f, 10f);
+                float duration = RandomGaussian(0.01f, timer);
+                float dilation = RandomGaussian(0.01f, 0.3f);
                 EyeTrackingEventType eventType = RandomEnumValue<EyeTrackingEventType>();
                 int productIndex = chooseProductIndex();
                 string product = ProductArray[productIndex];
-                EyeTrackingEvent eyeTrackingEvent = new EyeTrackingEvent(eventType, DateTime.Now, duration, product);
+                EyeTrackingEvent eyeTrackingEvent = new EyeTrackingEvent(eventType, DateTime.Now, duration, dilation, product);
                 eyeTrackingEventCallback(eyeTrackingEvent);
             }
         }
