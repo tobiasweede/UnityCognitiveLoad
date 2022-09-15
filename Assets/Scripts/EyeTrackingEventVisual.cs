@@ -33,17 +33,20 @@ public class EyeTrackingEventVisual : MonoBehaviour
         // Find dashboard elements
         fixationCountText = transform.Find("fixationCountText").GetComponent<TextMeshProUGUI>();
         fixationMeanDurationText = transform.Find("fixationMeanDurationText").GetComponent<TextMeshProUGUI>();
-        fixationLastDurationText = transform.Find("fixationLastDurationText").GetComponent<TextMeshProUGUI>();
-        dilationMeanText = transform.Find("dilationMeanText").GetComponent<TextMeshProUGUI>();
-        dilationLastText = transform.Find("dilationLastText").GetComponent<TextMeshProUGUI>();
-        blinkCountText = transform.Find("blinkCountText").GetComponent<TextMeshProUGUI>();
-        blinkMeanDurationText = transform.Find("blinkMeanDurationText").GetComponent<TextMeshProUGUI>();
 
-        // Set event callback function
         if (ComplexVisual)
+        {
             eyeTrackingEvents.eyeTrackingEventCallback = VisualizeComplex;
+            fixationLastDurationText = transform.Find("fixationLastDurationText").GetComponent<TextMeshProUGUI>();
+            dilationMeanText = transform.Find("dilationMeanText").GetComponent<TextMeshProUGUI>();
+            dilationLastText = transform.Find("dilationLastText").GetComponent<TextMeshProUGUI>();
+            blinkCountText = transform.Find("blinkCountText").GetComponent<TextMeshProUGUI>();
+            blinkMeanDurationText = transform.Find("blinkMeanDurationText").GetComponent<TextMeshProUGUI>();
+        }
         else
+        {
             eyeTrackingEvents.eyeTrackingEventCallback = VisualizeSimple;
+        }
     }
     private void VisualizeComplex(EyeTrackingEvents.EyeTrackingEvent eyeTrackingEvent)
     {
