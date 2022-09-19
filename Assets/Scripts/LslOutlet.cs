@@ -5,7 +5,7 @@ using LSL;
 
 public class LslOutlet : MonoBehaviour
 {
-    string StreamName = "eeg";
+    string StreamName = "markers";
     string StreamType = "Markers";
     private StreamOutlet outlet;
     private string[] sample = { "" };

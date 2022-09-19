@@ -18,6 +18,7 @@ public class TraceGame : MonoBehaviour
     public bool EnableWheel = false;
     private bool needAnswerWheel;
     private TraceBall ballPrefab;
+    private TextMeshProUGUI trackChar;
     private TraceWheel wheel;
     private GameObject ballsGameArea;
     private List<GameObject> ballList = new();
@@ -164,9 +165,9 @@ public class TraceGame : MonoBehaviour
                 unit.ToggleMove = false;
                 // var canvas = unit.transform.Find("Canvas");
                 // TextMeshProUGUI idText = canvas.transform.Find("Id").GetComponent<TextMeshProUGUI>();
-                TextMeshPro idText = unit.transform.Find("Id").GetComponent<TextMeshPro>();
+                // TextMeshPro idText = unit.transform.Find("Id").GetComponent<TextMeshPro>();
+                Text idText = unit.transform.GetComponentInChildren<Text>();
                 idText.text = unit.Id.ToString();
-                idText.transform.SetAsFirstSibling();
             }
             CreateAnswerButtons();
             ballsAnwerInstruction.gameObject.SetActive(true);
