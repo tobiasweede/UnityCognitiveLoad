@@ -295,10 +295,10 @@ public class TraceGame : MonoBehaviour
 
     void CreateNumbers()
     {
-        int newNumber = Random.Range(-100, 100); // -99 to 99
-        while (sumNumber + newNumber < 0 || sumNumber + newNumber > 100)
+        int newNumber = Random.Range(-10, 10); // for summation task
+        while (sumNumber + newNumber < 0 || sumNumber + newNumber > 10)
         {
-            newNumber = Random.Range(-100, 100); // draw new if out of range
+            newNumber = Random.Range(-10, 10); // draw new if out of range
         }
         sumNumber += newNumber;
 
