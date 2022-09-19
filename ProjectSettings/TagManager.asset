@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Answer
   layers:
   - Default
   - TransparentFX
@@ -40,4 +41,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Balls
+    uniqueID: 2182511293
+    locked: 0
+  - name: Text
+    uniqueID: 2733832723
+    locked: 0
+  - name: UI
+    uniqueID: 3204744863
     locked: 0

@@ -6,22 +6,22 @@ using TMPro;
 
 public class TraceGame : MonoBehaviour
 {
+    public GameObject ballAnswerPrefab;
+    public int BallCount;
+    public float HighlightTargetDuration;
+    public float PlayDuration = 60.0f;
+    public float ShowResultDuration = 5.0f;
     public bool EnableBalls = true;
     private bool needAnswerBalls;
     public bool EnableNumbers = false;
     private bool needAnswerNumbers;
     public bool EnableWheel = false;
     private bool needAnswerWheel;
+    private TraceBall ballPrefab;
     private TraceWheel wheel;
-    public TraceBall BallPrefab;
     private GameObject ballsGameArea;
     private List<GameObject> ballList = new();
-    public GameObject ballAnswerPrefab;
     private List<GameObject> answerList = new();
-    public int BallCount;
-    public float HighlightTargetDuration;
-    public float PlayDuration = 60.0f;
-    public float ShowResultDuration = 5.0f;
     private Vector3 areaSize;
     private int targetId;
     private GameObject startUi;
@@ -44,6 +44,8 @@ public class TraceGame : MonoBehaviour
     {
         startUi = GameObject.Find("UI");
         ballsGameArea = GameObject.Find("BallsGameArea");
+        ballPrefab = GameObject.Find("TraceBall").GetComponent<TraceBall>();
+        ballPrefab.gameObject.SetActive(false);
         ballsAnwerInstruction = GameObject.Find("BallsAnwerInstruction").GetComponent<TextMeshProUGUI>();
         resultBalls = GameObject.Find("ResultBallsText").GetComponent<TextMeshProUGUI>();
         resultNumbers = GameObject.Find("ResultNumbersText").GetComponent<TextMeshProUGUI>();
@@ -110,6 +112,7 @@ public class TraceGame : MonoBehaviour
         if (EnableWheel)
         {
             Debug.Log("Wheel enabled");
+            wheel.ChangeCount = 0;
             wheel.gameObject.SetActive(true);
             wheelEnterSlider.value = 0;
             wheel.StartMove();
@@ -120,10 +123,11 @@ public class TraceGame : MonoBehaviour
 
     void InstantiateGameSpheres(int id)
     {
-        TraceBall ball = Instantiate(BallPrefab, ballsGameArea.transform);
+        TraceBall ball = Instantiate(ballPrefab, ballsGameArea.transform);
         ball.SetAreaSize(areaSize);
         ball.Id = id;
         ball.name = "Ball " + id.ToString();
+        ball.gameObject.SetActive(true);
         ballList.Add(ball.gameObject);
 
         Vector3 position = new Vector3(
@@ -140,10 +144,11 @@ public class TraceGame : MonoBehaviour
 
     IEnumerator HighlightTarget(TraceBall newUnit, float playDuration)
     {
-        Color origColor = newUnit.GetComponent<SpriteRenderer>().material.color;
-        newUnit.GetComponent<SpriteRenderer>().material.color = Color.red;
+        SpriteRenderer ballSprite = newUnit.transform.Find("Ball").GetComponent<SpriteRenderer>();
+        Color origColor = ballSprite.material.color;
+        ballSprite.material.color = Color.red;
         yield return new WaitForSeconds(playDuration);
-        newUnit.GetComponent<SpriteRenderer>().material.color = origColor;
+        ballSprite.material.color = origColor;
     }
     IEnumerator EvaluateGame(float playDuration)
     {
@@ -154,12 +159,14 @@ public class TraceGame : MonoBehaviour
         if (EnableBalls)
         {
             needAnswerBalls = true;
-            foreach (TraceBall unit in GetComponentsInChildren<TraceBall>())
+            foreach (TraceBall unit in ballsGameArea.GetComponentsInChildren<TraceBall>())
             {
                 unit.ToggleMove = false;
-                var idText = unit.GetComponentInChildren<TextMeshPro>();
+                // var canvas = unit.transform.Find("Canvas");
+                // TextMeshProUGUI idText = canvas.transform.Find("Id").GetComponent<TextMeshProUGUI>();
+                TextMeshPro idText = unit.transform.Find("Id").GetComponent<TextMeshPro>();
                 idText.text = unit.Id.ToString();
-                idText.enabled = true;
+                idText.transform.SetAsFirstSibling();
             }
             CreateAnswerButtons();
             ballsAnwerInstruction.gameObject.SetActive(true);

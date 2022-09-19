@@ -5,7 +5,7 @@ using LSL;
 
 public class LslOutlet : MonoBehaviour
 {
-    string StreamName = "UnityDashboardPrototype.SimpleEyeTrackingDashboard";
+    string StreamName = "eeg";
     string StreamType = "Markers";
     private StreamOutlet outlet;
     private string[] sample = { "" };
