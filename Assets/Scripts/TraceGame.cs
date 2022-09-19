@@ -12,10 +12,10 @@ public class TraceGame : MonoBehaviour
     public float PlayDuration = 60.0f;
     public float ShowResultDuration = 5.0f;
     public bool EnableBalls = true;
+    public bool EnableNumbers = true;
+    public bool EnableWheel = true;
     private bool needAnswerBalls;
-    public bool EnableNumbers = false;
     private bool needAnswerNumbers;
-    public bool EnableWheel = false;
     private bool needAnswerWheel;
     private TraceBall ballPrefab;
     private TextMeshProUGUI trackChar;
@@ -40,6 +40,10 @@ public class TraceGame : MonoBehaviour
     private string numberString;
     private int sumNumber = 0;
     LslOutlet lslOutlet;
+    private List<int> treatmentList;
+    private int trailRefill;
+    private bool randomizedExperiment = false;
+    private Timer timer;
 
     void Start()
     {
@@ -60,7 +64,7 @@ public class TraceGame : MonoBehaviour
         numbersEnterButton = GameObject.Find("NumbersEnterButton").GetComponent<Button>();
         numbersEnterSlider = GameObject.Find("NumbersEnterSlider").GetComponent<Slider>();
 
-        lslOutlet = GetComponent<LslOutlet>();
+        lslOutlet = GameObject.Find("LslOutlet").GetComponent<LslOutlet>();
 
         wheel.gameObject.SetActive(false);
         wheelEnterButton.gameObject.SetActive(false);
@@ -72,6 +76,49 @@ public class TraceGame : MonoBehaviour
         resultWheel.gameObject.SetActive(false);
         numbersText.gameObject.SetActive(false);
         ballsAnwerInstruction.gameObject.SetActive(false);
+
+        treatmentList = new List<int> { 1, 2, 3 };
+        trailRefill = 2;
+        timer = GameObject.Find("Timer").GetComponent<Timer>();
+        timer.gameObject.SetActive(false);
+    }
+
+    public void StartRandomizedExperiment()
+    {
+        randomizedExperiment = true;
+        if (trailRefill == 0 && treatmentList.Count == 0)
+        {
+            randomizedExperiment = false;
+            AllowRestart(0);
+            return;
+        }
+        if (trailRefill > 0 && treatmentList.Count == 0)
+        {
+            treatmentList = new List<int> { 1, 2, 3 };
+            trailRefill -= 1;
+        }
+        int idx = UnityEngine.Random.Range(0, treatmentList.Count - 1);
+        int treatment = treatmentList[idx];
+        treatmentList.RemoveAt(idx);
+        switch (treatment)
+        {
+            case 1:
+                EnableBalls = true;
+                EnableNumbers = false;
+                EnableWheel = false;
+                break;
+            case 2:
+                EnableBalls = true;
+                EnableNumbers = true;
+                EnableWheel = false;
+                break;
+            case 3:
+                EnableBalls = true;
+                EnableNumbers = true;
+                EnableWheel = true;
+                break;
+        }
+        StartTraceGame();
     }
 
     public void StartTraceGame()
@@ -145,11 +192,11 @@ public class TraceGame : MonoBehaviour
 
     IEnumerator HighlightTarget(TraceBall newUnit, float playDuration)
     {
-        SpriteRenderer ballSprite = newUnit.transform.Find("Ball").GetComponent<SpriteRenderer>();
-        Color origColor = ballSprite.material.color;
-        ballSprite.material.color = Color.red;
+        Image ballImage = newUnit.transform.Find("Ball").GetComponent<Image>();
+        Color origColor = ballImage.color;
+        ballImage.color = Color.red;
         yield return new WaitForSeconds(playDuration);
-        ballSprite.material.color = origColor;
+        ballImage.color = origColor;
     }
     IEnumerator EvaluateGame(float playDuration)
     {
@@ -163,11 +210,9 @@ public class TraceGame : MonoBehaviour
             foreach (TraceBall unit in ballsGameArea.GetComponentsInChildren<TraceBall>())
             {
                 unit.ToggleMove = false;
-                // var canvas = unit.transform.Find("Canvas");
-                // TextMeshProUGUI idText = canvas.transform.Find("Id").GetComponent<TextMeshProUGUI>();
-                // TextMeshPro idText = unit.transform.Find("Id").GetComponent<TextMeshPro>();
                 Text idText = unit.transform.GetComponentInChildren<Text>();
                 idText.text = unit.Id.ToString();
+                idText.transform.SetAsLastSibling();
             }
             CreateAnswerButtons();
             ballsAnwerInstruction.gameObject.SetActive(true);
@@ -199,7 +244,7 @@ public class TraceGame : MonoBehaviour
         for (int i = 0; i < BallCount; ++i)
         {
             GameObject answerButton = Instantiate(ballAnswerPrefab, canvas.transform);
-            answerButton.transform.localPosition = new Vector3(-200 + i * 75f, -200f, 0f);
+            answerButton.transform.localPosition = new Vector3(-150 + i * 75f, -200f, 0f);
             answerButton.name = $"Answer {i}";
             var answerText = answerButton.GetComponentInChildren<TextMeshProUGUI>();
             answerText.text = i.ToString();
@@ -290,7 +335,16 @@ public class TraceGame : MonoBehaviour
         {
             resultWheel.gameObject.SetActive(false);
         }
-        startUi.gameObject.SetActive(true);
+
+        if (randomizedExperiment && !(trailRefill == 0 && treatmentList.Count == 0))
+        {
+            timer.StartTimer();
+        }
+        else
+        {
+            randomizedExperiment = false;
+            startUi.gameObject.SetActive(true);
+        }
     }
 
     void CreateNumbers()

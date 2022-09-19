@@ -4117,14 +4117,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: StartButton
       objectReference: {fileID: 0}
-    - target: {fileID: 2926133109819439668, guid: 0345f8b8025927eb894efb21da932e03, type: 3}
-      propertyPath: playDuration
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 2926133109819439668, guid: 0345f8b8025927eb894efb21da932e03, type: 3}
-      propertyPath: productCount
-      value: 4
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0345f8b8025927eb894efb21da932e03, type: 3}
 --- !u!1001 &3822257758242813169

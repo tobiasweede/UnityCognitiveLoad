@@ -5,10 +5,24 @@ using LSL;
 
 public class LslOutlet : MonoBehaviour
 {
+    public static LslOutlet Instance;
     string StreamName = "markers";
     string StreamType = "Markers";
     private StreamOutlet outlet;
     private string[] sample = { "" };
+
+    //Singeleton
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     void Start()
     {

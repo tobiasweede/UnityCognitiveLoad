@@ -60,7 +60,7 @@ public class EyeTrackingEventVisual : MonoBehaviour
                 fixationCount++;
                 fixationCountText.text = fixationCount.ToString();
                 fixationMeanDurationText.text = Math.Round((fixationSumDuration / fixationCount), 2).ToString() + " ms";
-                fixationLastDurationText.text = eyeTrackingEvent.duration.ToString();
+                fixationLastDurationText.text = Math.Round(eyeTrackingEvent.duration, 2).ToString() + " ms";
                 break;
 
             case EyeTrackingEvents.EyeTrackingEventType.Blink:
@@ -74,7 +74,7 @@ public class EyeTrackingEventVisual : MonoBehaviour
         dilationCount++;
         dilationSum += eyeTrackingEvent.dilation;
         dilationLastText.text = Math.Round(eyeTrackingEvent.dilation, 2).ToString();
-        dilationMeanText.text = Math.Round((dilationSum / dilationCount), 2).ToString() + " ms";
+        dilationMeanText.text = Math.Round((dilationSum / dilationCount), 2).ToString();
     }
 
     private void VisualizeSimple(EyeTrackingEvents.EyeTrackingEvent eyeTrackingEvent)

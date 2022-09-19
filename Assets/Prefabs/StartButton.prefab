@@ -147,7 +147,6 @@ GameObject:
   - component: {fileID: 2926133109819439658}
   - component: {fileID: 2926133109819439659}
   - component: {fileID: 2926133109819439656}
-  - component: {fileID: 2926133109819439669}
   - component: {fileID: 2926133109819439668}
   m_Layer: 5
   m_Name: StartButton
@@ -259,18 +258,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2926133109819439669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2926133109819439662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d1e44fecf126f9cfa15a9d475defcef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2926133109819439668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,5 +270,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 177add2b53b1137f2917b489734c98b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playDuration: 30
-  productCount: 5
+  playDuration: 40

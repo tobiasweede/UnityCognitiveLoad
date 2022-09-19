@@ -15,7 +15,7 @@ public class EyeTrackingStartVisual : MonoBehaviour
         startButton = GetComponent<Button>();
         startButton.onClick.AddListener(StartVisual);
 
-        lslOutlet = GetComponent<LslOutlet>();
+        lslOutlet = GameObject.Find("LslOutlet").GetComponent<LslOutlet>();
 
         title = GameObject.Find("Title").GetComponent<Text>();
 
