@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &99496930
 RectTransform:
   m_ObjectHideFlags: 0
@@ -347,7 +347,7 @@ MonoBehaviour:
   PlayDuration: 40
   ShowResultDuration: 5
   StartShowNumbers: 0
-  IntervalShowNumbers: 7
+  IntervalShowNumbers: 11
 --- !u!114 &489427318
 MonoBehaviour:
   m_ObjectHideFlags: 0
