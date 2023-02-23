@@ -14,7 +14,7 @@ All treatments send start and stop signals via a LSL outlet.
 
 A simple [LSL inlet](lsl_inlet.py) in python is also provided. 
 
-However, a socket server is listening and a [dummy socket sender](send_sensor_data.py) python script is also provided. This script could be further improved during the workshop (maybe in combination with LSL).
+However, a socket server is listening and a [dummy socket sender](send_sensor_data.py) python script is also provided. This script could be further improved (maybe in combination with LSL).
 
 ![lsl outlet](preview_lsl_outlet.PNG)
 
