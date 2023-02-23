@@ -9,12 +9,6 @@ Unity environment to create cognitive load.
 ![cl menu](preview_cl.PNG)
 ![cl menu](preview_lsl_outlet.PNG)
 
-## Binaries (in ZIP archives)
-
-[Windows](UnityCognitiveLoad_windows.zip)
-
-[Linux](UnityCognitiveLoad_linux.zip)
-
 # Features
 
 All treatments send start and stop signals via a LSL outlet.
