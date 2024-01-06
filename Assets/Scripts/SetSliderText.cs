@@ -11,6 +11,7 @@ public class SetSliderText : MonoBehaviour
     void Start()
     {
         sliderText = GetComponentInChildren<TextMeshProUGUI>();
+        gameObject.GetComponent<Slider>().onValueChanged.AddListener(delegate { SetText(); });
     }
 
     public void SetText()

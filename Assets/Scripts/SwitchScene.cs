@@ -6,22 +6,18 @@ using UnityEngine.UI;
 
 public class SwitchScene : MonoBehaviour
 {
-    private Button buttonEEG;
-    private Button buttonCL;
-    // Button buttonETsimple;
-    // Button buttonETcomplex;
+    private Button buttonMultitasking;
+    private Button buttonNback;
+    private Button buttonDashboard;
 
     void Start()
     {
-        buttonEEG = transform.Find("ButtonMultitasking").GetComponent<Button>();
-        buttonEEG.onClick.AddListener(() => ChangeScene("Multitasking"));
-        buttonEEG = transform.Find("ButtonDashboard").GetComponent<Button>();
-        buttonEEG.onClick.AddListener(() => ChangeScene("Dashboard"));
-
-        // buttonEEG = transform.Find("ButtonETsimple").GetComponent<Button>();
-        // buttonEEG.onClick.AddListener(() => ChangeScene("ETsimple"));
-        // buttonEEG = transform.Find("ButtonETcomplex").GetComponent<Button>();
-        // buttonEEG.onClick.AddListener(() => ChangeScene("ETcomplex"));
+        buttonMultitasking = transform.Find("ButtonMultitasking").GetComponent<Button>();
+        buttonMultitasking.onClick.AddListener(() => ChangeScene("Multitasking"));
+        buttonNback = transform.Find("buttonNback").GetComponent<Button>();
+        buttonNback.onClick.AddListener(() => ChangeScene("Nback"));
+        buttonDashboard = transform.Find("ButtonDashboard").GetComponent<Button>();
+        buttonDashboard.onClick.AddListener(() => ChangeScene("Dashboard"));
     }
 
     void ChangeScene(string scene)
