@@ -14,7 +14,7 @@ public class SwitchScene : MonoBehaviour
     {
         buttonMultitasking = transform.Find("ButtonMultitasking").GetComponent<Button>();
         buttonMultitasking.onClick.AddListener(() => ChangeScene("Multitasking"));
-        buttonNback = transform.Find("buttonNback").GetComponent<Button>();
+        buttonNback = transform.Find("ButtonNback").GetComponent<Button>();
         buttonNback.onClick.AddListener(() => ChangeScene("Nback"));
         buttonDashboard = transform.Find("ButtonDashboard").GetComponent<Button>();
         buttonDashboard.onClick.AddListener(() => ChangeScene("Dashboard"));

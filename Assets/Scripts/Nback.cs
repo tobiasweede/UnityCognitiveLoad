@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class Nback : MonoBehaviour
 {
     public int loopTime = 5;
     public int minRange = 1;
     public int maxRange = 3;
-    public int sequenceLength = 10;
     private int currentIndex;
     private List<int> sequence;
     private TextMeshProUGUI targetText;
     private TextMeshProUGUI responseText;
+    private TextMeshProUGUI sequenceText;
     private GameObject startDialog;
     private GameObject nbackDialog;
     private Button startButton;
@@ -30,6 +31,7 @@ public class Nback : MonoBehaviour
         nbackDialog = GameObject.Find("NbackDialog");
         targetText = GameObject.Find("TargetText").GetComponent<TextMeshProUGUI>();
         responseText = GameObject.Find("ResponseText").GetComponent<TextMeshProUGUI>();
+        sequenceText = GameObject.Find("SequenceText").GetComponent<TextMeshProUGUI>();
 
         targetStartPosition = targetText.transform.position;
         startButton.onClick.AddListener(StartNback);
@@ -40,8 +42,7 @@ public class Nback : MonoBehaviour
 
     void Update()
     {
-        // targetText.transform.position += targetText.transform.right * 50f * Time.deltaTime;
-        targetText.transform.localScale = targetText.transform.localScale + Vector3.one * 1.0f * Time.deltaTime;
+        moveText();
     }
 
     void InitializeSequence()
@@ -49,20 +50,16 @@ public class Nback : MonoBehaviour
         sequence = new List<int>();
 
         // Generate a random sequence of numbers (for simplicity, let's use integers)
-        for (int i = 0; i < sequenceLength; i++)
+        for (int i = 0; i < n; i++)
         {
             int randomValue = Random.Range(minRange, maxRange + 1); // Adjust the range as needed
             sequence.Add(randomValue);
         }
+        Debug.Log(sequence);
     }
     void CheckResponse()
     {
-        if (currentIndex < n + 1)
-        {
-            responseText.text = "Sequence too short. Nothing to do.";
-            return;
-        }
-        if (sequence[currentIndex] == sequence[currentIndex - n])
+        if (sequence.Last() == sequence.ElementAtOrDefault(sequence.Count - n - 1))
         {
             responseText.text = "Correct";
         }
@@ -79,14 +76,30 @@ public class Nback : MonoBehaviour
         nbackDialog.SetActive(true);
         responseText.text = "";
         InitializeSequence();
-        InvokeRepeating("NbackLoop", 0, loopTime);
+        StartCoroutine("NbackLoop");
     }
-    void NbackLoop()
+    IEnumerator NbackLoop()
     {
-        responseText.text = string.Join(",", sequence.ToArray());
+        while (true)
+        {
+            // Add new random variable and rotate list            
+            int randomValue = Random.Range(minRange, maxRange + 1);
+            sequence.Add(randomValue);
+            // sequence.RemoveAt(0);
 
-        targetText.transform.position = targetStartPosition;
-        targetText.transform.localScale = Vector3.one;
-        targetText.text = sequence[currentIndex++].ToString();
+            sequenceText.text = string.Join(", ", sequence.ToArray());
+
+            targetText.transform.position = targetStartPosition;
+            targetText.transform.localScale = Vector3.one;
+            targetText.text = sequence.Last().ToString();
+
+            yield return new WaitForSeconds(loopTime);
+        }
+    }
+
+    void moveText()
+    {
+        // targetText.transform.position += targetText.transform.right * 50f * Time.deltaTime;
+        targetText.transform.localScale = targetText.transform.localScale + Vector3.one * 1.0f * Time.deltaTime;
     }
 }
